@@ -11,7 +11,7 @@ package CircularLinkedList;
  */
 public interface List<E> extends Iterable<E> {
     public boolean addFirst(E element);
-    public boolean addFiLast(E element);
+    public boolean addLast(E element);
     public boolean add(int index, E element);
     public E remove (int index);
     public E get (int index);
@@ -19,9 +19,7 @@ public interface List<E> extends Iterable<E> {
     public int size();
     public boolean isEmpty();
     public void clear();
-    public E removeFirst(); // remueve el elemento al inicio de la lista
-    public E removeLast(); // remueve el elemento al final de la lista 
-    @Override
-    public String toString();
-    public NodeList getPrevios (NodeList p);
+    public E removeFirst(); 
+    public E removeLast();
+    
 }

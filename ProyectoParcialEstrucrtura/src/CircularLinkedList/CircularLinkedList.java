@@ -6,49 +6,50 @@
 package CircularLinkedList;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  *
  * @author Estefany Farias
  */
-public class CircularLinkedList<E>  implements List<E> {
-	private NodeList<E> last;
-	private int effectiveSize;
+public class CircularLinkedList<E> implements List<E> {
 
-	public CircularLinkedList() {
-		this.last=null;
-		effectiveSize=0;
-	}
+    private NodeList<E> last;
+    private int effectiveSize;
 
-	public NodeList<E> getLast() {
-		return last;
-	}
+    public CircularLinkedList() {
+        this.last = null;
+        effectiveSize = 0;
+    }
 
-	public void setLast(NodeList<E> last) {
-		this.last = last;
-	}
+    public NodeList<E> getLast() {
+        return last;
+    }
 
-	public int getEffectiveSize() {
-		return effectiveSize;
-	}
+    public void setLast(NodeList<E> last) {
+        this.last = last;
+    }
 
-	public void setEffectiveSize(int effectiveSize) {
-		this.effectiveSize = effectiveSize;
-	}
+    public int getEffectiveSize() {
+        return effectiveSize;
+    }
 
-	@Override
-	public boolean addFirst(E element) {
-		 if(element == null){
+    public void setEffectiveSize(int effectiveSize) {
+        this.effectiveSize = effectiveSize;
+    }
+
+    @Override
+    public boolean addFirst(E element) {
+        if (element == null) {
             return false;
         }
-        
+
         NodeList<E> nuevo = new NodeList(element);
-        if(isEmpty()){
+        if (isEmpty()) {
             this.last = nuevo;
             nuevo.setNext(nuevo);
             nuevo.setPrevious(nuevo);
-        }
-        else{
+        } else {
             nuevo.setNext(last.getNext());
             nuevo.setPrevious(last);
             last.getNext().setPrevious(nuevo);
@@ -56,22 +57,21 @@ public class CircularLinkedList<E>  implements List<E> {
         }
         effectiveSize++;
         return true;
-	}
+    }
 
-	@Override
-	public boolean addFiLast(E element) {
-		 if(element == null){
+    @Override
+    public boolean addLast(E element) {
+        if (element == null) {
             return false;
         }
-        
-        if(isEmpty()){
+
+        if (isEmpty()) {
             addFirst(element);
             return true;
-        }
-        else{
-            
+        } else {
+
             NodeList<E> nuevo = new NodeList(element);
-            
+
             nuevo.setPrevious(last);
             nuevo.setNext(last.getNext());
             last.getNext().setPrevious(nuevo);
@@ -80,88 +80,130 @@ public class CircularLinkedList<E>  implements List<E> {
             effectiveSize++;
             return true;
         }
-	}
+    }
 
-	@Override
-	public boolean add(int index, E element) {
-		 if(element != null){
-            if (index >=0 && index <= effectiveSize){
-                if(index == 0){
+    @Override
+    public boolean add(int index, E element) {
+        if (element != null) {
+            if (index >= 0 && index <= effectiveSize) {
+                if (index == 0) {
                     addFirst(element);
-                }else if(index == effectiveSize){
-                    addFiLast(element);
-                }
-                else{
+                } else if (index == effectiveSize) {
+                    addLast(element);
+                } else {
                     NodeList<E> nuevo = new NodeList(element);
                     NodeList<E> tmp = last.getNext();
-                    int count=0;
-                    while(count < index - 1 ){
+                    int count = 0;
+                    while (count < index - 1) {
                         tmp = tmp.getNext();
                         count++;
                     }
                     nuevo.setNext(tmp.getNext());
                     nuevo.setPrevious(tmp);
-                    tmp.getNext().setPrevious(nuevo);   
+                    tmp.getNext().setPrevious(nuevo);
                     tmp.setNext(nuevo);
                     effectiveSize++;
                 }
-            }else{
+            } else {
                 System.out.println("Error");
             }
         }
-		 return false;
-	}
+        return false;
+    }
 
-	@Override
-	public E remove(int index) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public E get(int index) {
+        if (index < 0 || index >= effectiveSize) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            NodeList<E> tmp = last.getNext();
+            for (int i = 0; i < index; i++) {
+                tmp = tmp.getNext();
+            }
+            return tmp.getContent();
+        }
+    }
 
-	@Override
-	public E get(int index) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public E set(int index, E element) {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        } else {
 
-	@Override
-	public E set(int index, E element) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+            NodeList<E> retorno = last;
+            retorno.getNext().setPrevious(retorno.getPrevious());
+            retorno.getPrevious().setNext(retorno.getNext());
+            retorno.setNext(null);
+            if (effectiveSize == 1) {
+                setLast(null);
+            } else {
+                setLast(last.getPrevious());
+            }
+            retorno.setPrevious(null);
+            effectiveSize--;
+            return retorno.getContent();
+        }
+    }
 
-	@Override
-	public int size() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public int size() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-	@Override
-	public boolean isEmpty() {
-		return effectiveSize==0;
-	}
+    }
 
-	@Override
-	public void clear() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public boolean isEmpty() {
+        return effectiveSize == 0;
+    }
 
-	@Override
-	public E removeFirst() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public void clear() {
+        NodeList<E> nodo = last.getNext();
+        for (int cont = 0; cont < effectiveSize; cont++) {
+            NodeList<E> next = nodo.getNext();
+            nodo.setContent(null);
+            nodo.setNext(null);
+            nodo.setPrevious(null);
+            nodo = next;
+        }
+        effectiveSize = 0;
+    }
 
-	@Override
-	public E removeLast() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public E remove(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-	@Override
-	public NodeList getPrevios(NodeList p) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    @Override
+    public E removeFirst() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-	@Override
-	public Iterator<E> iterator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-	
+    @Override
+    public E removeLast() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public String toString(){
+        String result="{";
+        if(!isEmpty()){
+            NodeList<E> tmp = last.getNext();
+            for( int n=0; n<effectiveSize; n++){
+                if(tmp==last){
+                    result += tmp.getContent().toString();
+                }else{
+                    result += tmp.getContent().toString() + ",";
+                }
+                tmp = tmp.getNext();
+            }
+        }
+        result +="}"; 
+        return result;
+    }
 
-	
+    @Override
+    public Iterator<E> iterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
