@@ -10,9 +10,9 @@ package CircularLinkedList;
  * @author Stefany Farias
  */
 public interface List<E> extends Iterable<E> {
-    public boolean addFirst(E e);
-    public boolean addFiLast(E e);
-    public boolean add(int index, E e);
+    public boolean addFirst(E element);
+    public boolean addFiLast(E element);
+    public boolean add(int index, E element);
     public E remove (int index);
     public E get (int index);
     public E set(int index, E element);

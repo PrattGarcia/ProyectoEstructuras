@@ -12,70 +12,156 @@ import java.util.Iterator;
  * @author Estefany Farias
  */
 public class CircularLinkedList<E>  implements List<E> {
+	private NodeList<E> last;
+	private int effectiveSize;
 
-    @Override
-    public boolean addFirst(E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	public CircularLinkedList() {
+		this.last=null;
+		effectiveSize=0;
+	}
 
-    @Override
-    public boolean addFiLast(E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	public NodeList<E> getLast() {
+		return last;
+	}
 
-    @Override
-    public boolean add(int index, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	public void setLast(NodeList<E> last) {
+		this.last = last;
+	}
 
-    @Override
-    public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	public int getEffectiveSize() {
+		return effectiveSize;
+	}
 
-    @Override
-    public E get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	public void setEffectiveSize(int effectiveSize) {
+		this.effectiveSize = effectiveSize;
+	}
 
-    @Override
-    public E set(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean addFirst(E element) {
+		 if(element == null){
+            return false;
+        }
+        
+        NodeList<E> nuevo = new NodeList(element);
+        if(isEmpty()){
+            this.last = nuevo;
+            nuevo.setNext(nuevo);
+            nuevo.setPrevious(nuevo);
+        }
+        else{
+            nuevo.setNext(last.getNext());
+            nuevo.setPrevious(last);
+            last.getNext().setPrevious(nuevo);
+            last.setNext(nuevo);
+        }
+        effectiveSize++;
+        return true;
+	}
 
-    @Override
-    public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean addFiLast(E element) {
+		 if(element == null){
+            return false;
+        }
+        
+        if(isEmpty()){
+            addFirst(element);
+            return true;
+        }
+        else{
+            
+            NodeList<E> nuevo = new NodeList(element);
+            
+            nuevo.setPrevious(last);
+            nuevo.setNext(last.getNext());
+            last.getNext().setPrevious(nuevo);
+            last.setNext(nuevo);
+            setLast(nuevo);
+            effectiveSize++;
+            return true;
+        }
+	}
 
-    @Override
-    public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean add(int index, E element) {
+		 if(element != null){
+            if (index >=0 && index <= effectiveSize){
+                if(index == 0){
+                    addFirst(element);
+                }else if(index == effectiveSize){
+                    addFiLast(element);
+                }
+                else{
+                    NodeList<E> nuevo = new NodeList(element);
+                    NodeList<E> tmp = last.getNext();
+                    int count=0;
+                    while(count < index - 1 ){
+                        tmp = tmp.getNext();
+                        count++;
+                    }
+                    nuevo.setNext(tmp.getNext());
+                    nuevo.setPrevious(tmp);
+                    tmp.getNext().setPrevious(nuevo);   
+                    tmp.setNext(nuevo);
+                    effectiveSize++;
+                }
+            }else{
+                System.out.println("Error");
+            }
+        }
+		 return false;
+	}
 
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public E remove(int index) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
-    @Override
-    public E removeFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public E get(int index) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
-    @Override
-    public E removeLast() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public E set(int index, E element) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
-    @Override
-    public NodeList getPrevios(NodeList p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public int size() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
-    @Override
-    public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+	@Override
+	public boolean isEmpty() {
+		return effectiveSize==0;
+	}
+
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public E removeFirst() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public E removeLast() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public NodeList getPrevios(NodeList p) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
+
+	
 }
