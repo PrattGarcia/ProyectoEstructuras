@@ -147,7 +147,7 @@ public class CircularLinkedList<E> implements List<E> {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return effectiveSize;
 
     }
 
@@ -171,17 +171,73 @@ public class CircularLinkedList<E> implements List<E> {
 
     @Override
     public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(index > effectiveSize-1 || index < 0){//Tambien manda una excepticion cuando está vacio
+            throw new IndexOutOfBoundsException();
+        }if(isEmpty()){
+            throw new NoSuchElementException();
+        }else if(index==0){
+            return removeFirst();
+        }else if(index==effectiveSize-1){
+            return removeLast();
+        }
+        else{
+            
+            NodeList<E> retorno = last.getNext();
+            int count=0;
+            while(count < index){
+                retorno = retorno.getNext();
+                count++;
+            }
+            
+            retorno.getNext().setPrevious(retorno.getPrevious());
+            retorno.getPrevious().setNext(retorno.getNext());
+            retorno.setNext(null); 
+            retorno.setPrevious(null);
+            effectiveSize--;
+            return retorno.getContent();
+        }
     }
 
     @Override
     public E removeFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        else{
+            
+            NodeList<E> retorno = last.getNext();
+            last.setNext(retorno.getNext());
+            retorno.getNext().setPrevious(last);
+            retorno.setNext(null); 
+            retorno.setPrevious(null);
+            if(effectiveSize==1){
+                setLast(null);
+            }
+            effectiveSize--;
+            return retorno.getContent();
+        }
     }
 
     @Override
     public E removeLast() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        else{
+            
+            NodeList<E> retorno = last;
+            retorno.getNext().setPrevious(retorno.getPrevious());
+            retorno.getPrevious().setNext(retorno.getNext());
+            retorno.setNext(null);
+            if(effectiveSize==1){
+                setLast(null);
+            }else{
+                setLast(last.getPrevious());
+            }
+            retorno.setPrevious(null);
+            effectiveSize--;
+            return retorno.getContent();
+        }
     }
     
     @Override
