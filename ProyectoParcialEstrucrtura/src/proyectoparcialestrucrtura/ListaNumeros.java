@@ -31,7 +31,7 @@ public class ListaNumeros {
         return total;
     }
     
-    public static CircularLinkedList<Numero> moverderecha(CircularLinkedList<Numero> ns){
+    public static CircularLinkedList<Numero> moverDerecha(CircularLinkedList<Numero> ns){
        NodeList<Numero> tmp;
        CircularLinkedList<Numero> resultado = new CircularLinkedList<>();
         int i = 1;
@@ -43,6 +43,17 @@ public class ListaNumeros {
         return resultado;
     }
      
+    public static CircularLinkedList<Numero> moverIzquierda(CircularLinkedList<Numero> ns){
+       NodeList<Numero> tmp;
+       CircularLinkedList<Numero> resultado = new CircularLinkedList<>();
+        int i = 1;
+        for (tmp= ns.getLast().getNext();i<=ns.getEffectiveSize(); tmp = tmp.getNext()) {
+                tmp.getNext().getContent().setNumero(tmp.getNext().getContent().getNumero()-1);
+                resultado.addLast(tmp.getNext().getContent());
+                i++;
+        }
+        return resultado;
+    }
      
      public static void dobleEliminacion(CircularLinkedList<Numero> l1,CircularLinkedList<Numero> l2,int index){
          l1.remove(index);
