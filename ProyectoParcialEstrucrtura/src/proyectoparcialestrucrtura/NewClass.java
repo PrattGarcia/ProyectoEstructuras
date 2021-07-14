@@ -6,8 +6,8 @@
 package proyectoparcialestrucrtura;
 
 import CircularLinkedList.CircularLinkedList;
-import static proyectoparcialestrucrtura.ListaNumeros.moverderecha;
-import static proyectoparcialestrucrtura.ListaNumeros.moverizquierda;
+//import static proyectoparcialestrucrtura.ListaNumeros.moverderecha;
+//import static proyectoparcialestrucrtura.ListaNumeros.moverizquierda;
 
 /**
  *
@@ -23,7 +23,7 @@ public class NewClass {
         System.out.println(prueba);
        
         //System.out.println(moverderecha(prueba));
-        System.out.println(moverizquierda(prueba));
+        //System.out.println(moverizquierda(prueba));
         
     }
 }

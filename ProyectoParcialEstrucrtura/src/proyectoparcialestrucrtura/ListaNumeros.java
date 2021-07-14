@@ -30,6 +30,18 @@ public class ListaNumeros {
         }
         return total;
     }
+    
+    public static CircularLinkedList<Numero> moverderecha(CircularLinkedList<Numero> ns){
+       NodeList<Numero> tmp;
+       CircularLinkedList<Numero> resultado = new CircularLinkedList<>();
+        int i = 1;
+        for (tmp= ns.getLast().getNext();i<=ns.getEffectiveSize(); tmp = tmp.getNext()) {
+                tmp.getPrevious().getContent().setNumero(tmp.getPrevious().getContent().getNumero()+1);
+                resultado.addLast(tmp.getPrevious().getContent());
+                i++;
+        }
+        return resultado;
+    }
      
      
      public static void dobleEliminacion(CircularLinkedList<Numero> l1,CircularLinkedList<Numero> l2,int index){
