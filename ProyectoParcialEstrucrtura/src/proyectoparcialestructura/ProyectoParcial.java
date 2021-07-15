@@ -55,6 +55,8 @@ public class ProyectoParcial extends Application {
         Button btnGirarDer = new Button();
         btnGirarDer.setText("Girar ->");
         Button btnDelete = new Button();
+        Button btnGirarIz = new Button();
+        btnGirarIz.setText("<- Girar");
         btnDelete.setText("Eliminar");
         TextField txtDelete = new TextField();
         ObservableList<String> items = FXCollections.observableArrayList();
@@ -95,6 +97,10 @@ public class ProyectoParcial extends Application {
             listaNumeros=moverDerecha(listaNumeros);
             posicionarNumeros(ruleta);
         });
+          btnGirarIz.setOnAction((e) -> {
+            listaNumeros=moverIzquierda(listaNumeros);
+            posicionarNumeros(ruleta);
+        });
         btnDelete.setOnAction((e) -> {
             int index = Integer.parseInt(txtDelete.getText());
             dobleEliminacion(listaNumeros,listaNumeros2,index);
@@ -102,7 +108,7 @@ public class ProyectoParcial extends Application {
         });
         
 
-        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb,btnGirarDer);
+        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb,btnGirarDer,btnGirarIz);
         Scene scene = new Scene(root1, 1800, 900);
         primaryStage.setScene(scene);
         primaryStage.show();
