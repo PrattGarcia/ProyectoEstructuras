@@ -4,15 +4,21 @@ import CircularLinkedList.CircularLinkedList;
 import java.util.ListIterator;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import static proyectoparcialestructura.ListaNumeros.dobleEliminacion;
+import static proyectoparcialestructura.ListaNumeros.moverDerecha;
+import static proyectoparcialestructura.ListaNumeros.moverIzquierda;
 import static proyectoparcialestructura.ListaNumeros.sumaNumeros;
 
 /**
@@ -46,16 +52,25 @@ public class ProyectoParcial extends Application {
         TextField txtCantidad = new TextField();
         Button btnContinuar = new Button();
         btnContinuar.setText("Crear");
+        
+        Button btnDelete = new Button();
+        btnDelete.setText("Eliminar");
+        TextField txtDelete = new TextField();
+        ObservableList<String> items = FXCollections.observableArrayList();
+        items.addAll("Ruleta1","Ruleta2");
+        ComboBox<String> comb = new ComboBox<>(items);
         Label look = new Label();
         Label look2 = new Label();
         Label lookSum = new Label();
         HBox box1 = new HBox();
         HBox contenedorRuleta = new HBox();
-        box1.getChildren().addAll(titular, texto, txtCantidad, btnContinuar);
+        box1.getChildren().addAll(titular, texto, txtCantidad, btnContinuar,btnDelete,txtDelete);
         Pane ruleta = new Pane();
         contenedorRuleta.getChildren().add(ruleta);
         contenedorRuleta.setAlignment(Pos.CENTER);
+        
         btnContinuar.setOnAction((e) -> {
+            btnContinuar.setDisable(true);
             int cantidad = Integer.parseInt(txtCantidad.getText());
 
             for (int i = 1; i <= cantidad; i++) {
@@ -72,9 +87,18 @@ public class ProyectoParcial extends Application {
             look2.setText(listaNumeros2.toString());
             lookSum.setText("" + sumaNumeros(listaNumeros));
             posicionarNumeros(ruleta);
+            //listaNumeros.clear();
+            //listaNumeros2.clear();
         });
+        
+        btnDelete.setOnAction((e) -> {
+            int index = Integer.parseInt(txtDelete.getText());
+            dobleEliminacion(listaNumeros,listaNumeros2,index);
+            posicionarNumeros(ruleta);
+        });
+        
 
-        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta);
+        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb);
         Scene scene = new Scene(root1, 1800, 900);
         primaryStage.setScene(scene);
         primaryStage.show();

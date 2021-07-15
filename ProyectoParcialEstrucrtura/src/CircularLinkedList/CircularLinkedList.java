@@ -184,7 +184,7 @@ public class CircularLinkedList<E> implements List<E> {
         else{
             
             NodeList<E> retorno = last.getNext();
-            int count=0;
+            int count=1;
             while(count < index){
                 retorno = retorno.getNext();
                 count++;
