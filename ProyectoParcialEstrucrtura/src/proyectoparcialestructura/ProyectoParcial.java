@@ -52,7 +52,8 @@ public class ProyectoParcial extends Application {
         TextField txtCantidad = new TextField();
         Button btnContinuar = new Button();
         btnContinuar.setText("Crear");
-        
+        Button btnGirarDer = new Button();
+        btnGirarDer.setText("Girar ->");
         Button btnDelete = new Button();
         btnDelete.setText("Eliminar");
         TextField txtDelete = new TextField();
@@ -90,7 +91,10 @@ public class ProyectoParcial extends Application {
             //listaNumeros.clear();
             //listaNumeros2.clear();
         });
-        
+        btnGirarDer.setOnAction((e) -> {
+            listaNumeros=moverDerecha(listaNumeros);
+            posicionarNumeros(ruleta);
+        });
         btnDelete.setOnAction((e) -> {
             int index = Integer.parseInt(txtDelete.getText());
             dobleEliminacion(listaNumeros,listaNumeros2,index);
@@ -98,7 +102,7 @@ public class ProyectoParcial extends Application {
         });
         
 
-        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb);
+        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb,btnGirarDer);
         Scene scene = new Scene(root1, 1800, 900);
         primaryStage.setScene(scene);
         primaryStage.show();
