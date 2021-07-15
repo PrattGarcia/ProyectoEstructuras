@@ -5,6 +5,8 @@
  */
 package CircularLinkedList;
 
+import java.util.ListIterator;
+
 /**
  *
  * @author Stefany Farias
@@ -21,5 +23,6 @@ public interface List<E> extends Iterable<E> {
     public void clear();
     public E removeFirst(); 
     public E removeLast();
+    
     
 }

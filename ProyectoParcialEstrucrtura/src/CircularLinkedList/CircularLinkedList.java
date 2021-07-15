@@ -6,6 +6,7 @@
 package CircularLinkedList;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -257,11 +258,130 @@ public class CircularLinkedList<E> implements List<E> {
         result +="}"; 
         return result;
     }
+ 
+
+   public ListIterator<E> ListIterator() {
+        return new ListIterator<E>() {
+            private NodeList<E> nextItem=last.getNext();
+            private NodeList<E> previousItem=last;
+            private int index = 0;
+            private NodeList<E> lastReturned=null;
+            @Override
+            public boolean hasNext() {
+                return effectiveSize!=0;
+            }
+            @Override
+            public E next() {
+                if(!hasNext()){
+                    return null;
+                }else{
+                    lastReturned = nextItem;
+                    nextItem = nextItem.getNext();
+                    previousItem = lastReturned.getPrevious();
+                    return lastReturned.getContent();
+                }
+            }
+            @Override
+            public boolean hasPrevious() {
+                return effectiveSize!=0;
+            }
+            @Override
+            public E previous() {
+                if(!hasPrevious()){
+                    return null;
+                }else{
+                    lastReturned = previousItem;
+                    previousItem = previousItem.getPrevious();
+                    nextItem = lastReturned.getNext();
+                    return lastReturned.getContent();
+                }
+            }
+
+            @Override
+            public int nextIndex() {
+                return index+1;
+            }
+
+            @Override
+            public int previousIndex() {
+                return index-1;
+            }
+
+            @Override
+            public void remove() {
+
+                if(isEmpty() || lastReturned==null){
+                    throw new NoSuchElementException();
+                }
+                previousItem.setNext(lastReturned.getNext());
+                nextItem.setPrevious(lastReturned.getPrevious());
+                //nextItem=last.getNext();
+                lastReturned.setPrevious(null);
+                lastReturned.setNext(null);
+                //lastReturned=last.getNext();
+                if(lastReturned==last){
+                    setLast(previousItem);
+                }else if(effectiveSize==1){
+                    setLast(null);
+                }
+                effectiveSize--;
+                
+            }
+
+            @Override
+            public void set(E e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void add(E e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        };
+    }
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Iterator<E>() {
+            NodeList<E> next = last.getNext();
+            NodeList<E> lastReturned = null;
+            @Override
+            public boolean hasNext() {
+                return  effectiveSize!=0;
+            }
+
+            @Override
+            public E next() {
+                if(!hasNext()){
+                    return null;
+                }else{
+                    lastReturned = next;
+                    next = next.getNext();
+                    return lastReturned.getContent();
+                }
+
+            }
+            
+            @Override
+            public void remove(){
+                if(isEmpty() || lastReturned==null){
+                    throw new NoSuchElementException();
+                }
+                lastReturned.getNext().setPrevious(lastReturned.getPrevious());
+                lastReturned.setNext(null); 
+                lastReturned = lastReturned.getPrevious();
+                lastReturned.getNext().setPrevious(null);
+                lastReturned.setNext(next);
+                if(lastReturned==last){
+                    setLast(last.getPrevious());
+                }else if(effectiveSize==1){
+                    setLast(null);
+                }
+                effectiveSize--;
+            }
+            
+        };
     }
-    
-   
+
 }
