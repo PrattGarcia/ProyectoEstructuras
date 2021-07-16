@@ -28,7 +28,8 @@ import static proyectoparcialestructura.ListaNumeros.sumaNumeros;
 public class ProyectoParcial extends Application {
 
     private CircularLinkedList<Numero> listaNumeros = new CircularLinkedList<>();
-    private CircularLinkedList<Numero> listaNumeros2 = new CircularLinkedList<>();
+    private CircularLinkedList<Numero> listaNumeros2 = new CircularLinkedList<>(); 
+    
 
     @Override
     public void start(Stage primaryStage) {
@@ -50,24 +51,31 @@ public class ProyectoParcial extends Application {
         Label titular = new Label("Ingrese la cantidad de números");
         Label texto = new Label();
         TextField txtCantidad = new TextField();
+        Label apuesta = new Label("Ingrese su apuesta:");
+        TextField txtApuesta = new TextField();
+        HBox kakegurui = new HBox();
+        kakegurui.getChildren().addAll(apuesta,txtApuesta);
         Button btnContinuar = new Button();
         btnContinuar.setText("Crear");
         Button btnGirarDer = new Button();
         btnGirarDer.setText("Girar ->");
-        Button btnDelete = new Button();
         Button btnGirarIz = new Button();
         btnGirarIz.setText("<- Girar");
+        Button btnDelete = new Button();
         btnDelete.setText("Eliminar");
-        TextField txtDelete = new TextField();
         ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll("Ruleta1","Ruleta2");
-        ComboBox<String> comb = new ComboBox<>(items);
+        ComboBox<String> comboIndices = new ComboBox<>(items);
+        Label instruccion = new Label("Seleccione con que opcion desea comenzar el juego");
+        TextField txtDelete = new TextField();
+        ObservableList<String> items2 = FXCollections.observableArrayList();
+        items2.addAll("Ruleta1","Ruleta2");
+        ComboBox<String> comb = new ComboBox<>(items2);
         Label look = new Label();
         Label look2 = new Label();
         Label lookSum = new Label();
         HBox box1 = new HBox();
         HBox contenedorRuleta = new HBox();
-        box1.getChildren().addAll(titular, texto, txtCantidad, btnContinuar,btnDelete,txtDelete);
+        box1.getChildren().addAll(titular, texto, txtCantidad, btnContinuar,btnDelete,comboIndices);
         Pane ruleta = new Pane();
         contenedorRuleta.getChildren().add(ruleta);
         contenedorRuleta.setAlignment(Pos.CENTER);
@@ -86,29 +94,101 @@ public class ProyectoParcial extends Application {
                 num.setNumero((int) (Math.random() * 10));
                 listaNumeros2.addLast(num);
             }
+            int limite = listaNumeros.size();
+            int v=0;
+            for (int c=0;c<limite;c++){
+                System.out.println(v);
+                System.out.println(c);
+                items.add(""+v);
+                v++;
+            }
             look.setText(listaNumeros.toString());
             look2.setText(listaNumeros2.toString());
-            lookSum.setText("" + sumaNumeros(listaNumeros));
+            lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
             posicionarNumeros(ruleta);
-            //listaNumeros.clear();
-            //listaNumeros2.clear();
+            verificarVictoria(txtApuesta);
+            verificarDerrota();
         });
         btnGirarDer.setOnAction((e) -> {
-            listaNumeros=moverDerecha(listaNumeros);
-            posicionarNumeros(ruleta);
+            instruccion.setText("Ahora debe realizar una operacion de eliminacion");
+            if (comb.getValue()=="Ruleta1"){
+                listaNumeros=moverDerecha(listaNumeros);
+                posicionarNumeros(ruleta);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+                btnDelete.setDisable(false);
+                txtDelete.setDisable(false);
+                lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
+                verificarVictoria(txtApuesta);
+                verificarDerrota();
+                
+            }else if(comb.getValue()=="Ruleta2"){
+                listaNumeros2=moverDerecha(listaNumeros2);
+                posicionarNumeros(ruleta);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+                btnDelete.setDisable(false);
+                txtDelete.setDisable(false);
+                lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
+                verificarVictoria(txtApuesta);
+                verificarDerrota();
+            }
         });
-          btnGirarIz.setOnAction((e) -> {
-            listaNumeros=moverIzquierda(listaNumeros);
-            posicionarNumeros(ruleta);
+        btnGirarIz.setOnAction((e) -> {
+            instruccion.setText("Ahora debe realizar una operacion de eliminacion");
+            if(comb.getValue()=="Ruleta1"){
+                listaNumeros=moverIzquierda(listaNumeros);
+                posicionarNumeros(ruleta);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+                btnDelete.setDisable(false);
+                txtDelete.setDisable(false);
+                lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
+                verificarVictoria(txtApuesta);
+                verificarDerrota();
+                
+            }
+            else if(comb.getValue()=="Ruleta2"){
+                listaNumeros2=moverIzquierda(listaNumeros2);
+                posicionarNumeros(ruleta);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+                btnDelete.setDisable(false);
+                txtDelete.setDisable(false);
+                lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
+                verificarVictoria(txtApuesta);
+                verificarDerrota();
+                
+            }
         });
         btnDelete.setOnAction((e) -> {
-            int index = Integer.parseInt(txtDelete.getText());
-            dobleEliminacion(listaNumeros,listaNumeros2,index);
-            posicionarNumeros(ruleta);
+            
+            instruccion.setText("Ahora debe realizar una operacion de Giro");
+                int index = Integer.parseInt(comboIndices.getValue());
+                dobleEliminacion(listaNumeros,listaNumeros2,index);
+                posicionarNumeros(ruleta);
+                btnDelete.setDisable(true);
+                txtDelete.setDisable(true);
+                btnGirarDer.setDisable(false);
+                btnGirarIz.setDisable(false);
+                if(listaNumeros.size()==0 && listaNumeros.size()==0){
+                    lookSum.setText("0");
+                }else{
+                    lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
+                }
+                int limite = listaNumeros.size();
+                int v=0;
+                items.clear();
+                for (int c=0;c<limite;c++){
+                    items.add(""+v);
+                    v++;
+                }
+                verificarVictoria(txtApuesta);
+                verificarDerrota();
         });
         
 
-        root1.getChildren().addAll(box1, look, look2, lookSum, contenedorRuleta,comb,btnGirarDer,btnGirarIz);
+        root1.getChildren().addAll(box1, look, look2, lookSum,kakegurui,instruccion,comb,btnGirarDer,btnGirarIz,contenedorRuleta);
         Scene scene = new Scene(root1, 1800, 900);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -116,40 +196,88 @@ public class ProyectoParcial extends Application {
     }
 
     //Método que recorre con un iterador la lista de niños y los posiciona de forma circular con un fórmula.
+    
+    public void verificarVictoria(TextField txtapuesta){
+        //VBox ventanaVictoria = new VBox();
+        //Label lb = new Label("HAS GANADO!!!!");
+        
+        int apuesta = Integer.parseInt(txtapuesta.getText());
+        
+        //Label lb1 = new Label("Su apuesta es: "+apuesta+" "+"El valor de los circulos es: "+sumaRuletas);
+        //ventanaVictoria.getChildren().addAll(lb,lb1);
+        //Scene scene = new Scene(ventanaVictoria,800,100);
+        //primaryStage.setScene(scene);
+        int sumaRuletas;
+        if(listaNumeros.size()!=0 && listaNumeros.size()!=0){
+            sumaRuletas = sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2);
+        }else{
+            sumaRuletas = 0;
+        }
+        if((apuesta == sumaRuletas)){
+            System.out.println("Ganaste");
+        }
+        
+    }
+    public void verificarDerrota(){
+        if(listaNumeros.size()==0 && listaNumeros2.size()==0){
+            System.out.println("Cagaste");
+        }
+    }
+    
    
     public void posicionarNumeros(Pane panelRuleta) {
 
         if (!panelRuleta.getChildren().isEmpty()) {
             panelRuleta.getChildren().clear();
         }
-        ListIterator<Numero> itPart = listaNumeros.ListIterator();
-        Numero number = itPart.next();
+        if(listaNumeros.size()!=0 && listaNumeros2.size()!=0){
+            ListIterator<Numero> itPart = listaNumeros.ListIterator();
+            Numero number = itPart.next();
+            int indice=0;
+            for (double i = 0; i <= 360; i += 360 / (listaNumeros.getEffectiveSize()) + 1) {
+                Double x = 340 + 300 * Math.cos(Math.toRadians(i));
+                Double y = 265 + 300 * Math.sin(Math.toRadians(i));
 
-        for (double i = 0; i <= 360; i += 360 / (listaNumeros.getEffectiveSize()) + 1) {
+                Label ind = new Label("INDICE: "+indice);
+                ind.setRotate(i + 90);
+                ind.relocate(x, y);
+                panelRuleta.getChildren().add(ind);
+                //System.out.println("" + number.getNumero());
+                number = itPart.next();
+                indice++;
+            }
 
-            Double x = 340 + 300 * Math.cos(Math.toRadians(i));
-            Double y = 265 + 300 * Math.sin(Math.toRadians(i));
+            for (double i = 0; i <= 360; i += 360 / (listaNumeros.getEffectiveSize()) + 1) {
+                Double x = 340 + 200 * Math.cos(Math.toRadians(i));
+                Double y = 265 + 200 * Math.sin(Math.toRadians(i));
 
-            Button btns = new Button("" + number.getNumero());
-            btns.setRotate(i + 90);
-            btns.relocate(x, y);
-            panelRuleta.getChildren().add(btns);
-            System.out.println("" + number.getNumero());
-            number = itPart.next();
+                Button btns = new Button("" + number.getNumero());
+                btns.setRotate(i + 90);
+                btns.relocate(x, y);
+                panelRuleta.getChildren().add(btns);
+                //System.out.println("" + number.getNumero());
+                number = itPart.next();
+            }
+
+            ListIterator<Numero> itPart2 = listaNumeros2.ListIterator();
+            Numero number2 = itPart2.next();
+            for (double i = 0; i <= 360; i += 360 / (listaNumeros2.getEffectiveSize()) + 1) {
+                Double x = 340 + 100 * Math.cos(Math.toRadians(i));
+                Double y = 265 + 100 * Math.sin(Math.toRadians(i));
+
+                Button btns = new Button("" + number2.getNumero());
+                btns.setRotate(i + 90);
+                btns.relocate(x, y);
+                panelRuleta.getChildren().add(btns);
+                number2 = itPart2.next();
+            }
         }
-
-        ListIterator<Numero> itPart2 = listaNumeros2.ListIterator();
-        Numero number2 = itPart2.next();
-        for (double i = 0; i <= 360; i += 360 / (listaNumeros2.getEffectiveSize()) + 1) {
-
-            Double x = 340 + 150 * Math.cos(Math.toRadians(i));
-            Double y = 265 + 150 * Math.sin(Math.toRadians(i));
-
-            Button btns = new Button("" + number2.getNumero());
-            btns.setRotate(i + 90);
-            btns.relocate(x, y);
-            panelRuleta.getChildren().add(btns);
-            number2 = itPart2.next();
+    }
+    public void obtenerIndices(){
+        int c;
+        int limite = listaNumeros.size();
+        for (c=0;c<=limite;c++){
+            
         }
     }
 }

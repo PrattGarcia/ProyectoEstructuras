@@ -174,8 +174,11 @@ public class CircularLinkedList<E> implements List<E> {
     public E remove(int index) {
         if(index > effectiveSize-1 || index < 0){//Tambien manda una excepticion cuando está vacio
             throw new IndexOutOfBoundsException();
+          
+            
         }if(isEmpty()){
             throw new NoSuchElementException();
+          
         }else if(index==0){
             return removeFirst();
         }else if(index==effectiveSize-1){
@@ -184,7 +187,7 @@ public class CircularLinkedList<E> implements List<E> {
         else{
             
             NodeList<E> retorno = last.getNext();
-            int count=1;
+            int count=0;
             while(count < index){
                 retorno = retorno.getNext();
                 count++;
