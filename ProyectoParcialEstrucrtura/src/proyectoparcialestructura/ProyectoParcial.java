@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import static proyectoparcialestructura.ListaNumeros.dobleEliminacion;
 import static proyectoparcialestructura.ListaNumeros.moverDerecha;
 import static proyectoparcialestructura.ListaNumeros.moverIzquierda;
@@ -47,14 +48,20 @@ public class ProyectoParcial extends Application {
     public void ventanaInicio(Stage primaryStage) {
 
         VBox root1 = new VBox();
-
+        Label Espacio = new Label();
+        Label Espacio1 = new Label();
+        Label Espacio4 = new Label("Suma de las Ruletas");
+        Label infoGiro = new Label();
+        HBox contGiro = new HBox();
+        HBox contEliminar = new HBox();
         Label titular = new Label("Ingrese la cantidad de números");
-        Label texto = new Label();
+        Label txtIndice = new Label(" <--Por favor seleccione un indice");
+        Button btnEmpezar = new Button("Empezar");
         TextField txtCantidad = new TextField();
         Label apuesta = new Label("Ingrese su apuesta:");
         TextField txtApuesta = new TextField();
         HBox kakegurui = new HBox();
-        kakegurui.getChildren().addAll(apuesta,txtApuesta);
+        kakegurui.getChildren().addAll(apuesta,txtApuesta,btnEmpezar);
         Button btnContinuar = new Button();
         btnContinuar.setText("Crear");
         Button btnGirarDer = new Button();
@@ -70,20 +77,107 @@ public class ProyectoParcial extends Application {
         ObservableList<String> items2 = FXCollections.observableArrayList();
         items2.addAll("Ruleta1","Ruleta2");
         ComboBox<String> comb = new ComboBox<>(items2);
-        Label look = new Label();
-        Label look2 = new Label();
-        Label lookSum = new Label();
+        
+        Button lookSum = new Button();
+        lookSum.setPrefSize(200, 150);
+        
+        HBox contenedorOpFinales = new HBox();
+        Button salir = new Button("Salir");
+        Button Again = new Button("Empezar de nuevo");
+        contenedorOpFinales.getChildren().addAll(salir,Again);
+        contenedorOpFinales.setAlignment(Pos.CENTER);
+        
         HBox box1 = new HBox();
         HBox contenedorRuleta = new HBox();
-        box1.getChildren().addAll(titular, texto, txtCantidad, btnContinuar,btnDelete,comboIndices);
+        box1.getChildren().addAll(titular, txtCantidad, btnContinuar);
         Pane ruleta = new Pane();
         contenedorRuleta.getChildren().add(ruleta);
         contenedorRuleta.setAlignment(Pos.CENTER);
         
+        contGiro.getChildren().addAll(comb,btnGirarDer,btnGirarIz,infoGiro);
+        contEliminar.getChildren().addAll(btnDelete,comboIndices,txtIndice);
+                
+        txtCantidad.setDisable(true);
+        btnContinuar.setDisable(true);
+        btnDelete.setDisable(true);
+        comboIndices.setDisable(true);
+        txtIndice.setVisible(false);
+        comb.setDisable(true);
+        btnGirarDer.setDisable(true);
+        btnGirarIz.setDisable(true);
+        comboIndices.setValue("0");
+        comb.setValue("Ruleta1");
+        
+        
+        salir.setOnAction((e) -> {
+            System.exit(0);
+        });
+        
+        
+        Again.setOnAction((e) -> {
+            if(listaNumeros.size()==0 && listaNumeros2.size()==0){
+                instruccion.setText("Seleccione con que opcion desea comenzar el juego");
+                ruleta.getChildren().clear();
+                comboIndices.getItems().clear();
+                txtApuesta.setDisable(false);
+                txtApuesta.clear();
+                apuesta.setDisable(false);
+                btnEmpezar.setDisable(false);
+                txtCantidad.clear();
+                lookSum.setText("0");
+                comboIndices.setValue("0");
+                txtCantidad.setDisable(true);
+                btnContinuar.setDisable(true);
+                btnDelete.setDisable(true);
+                comboIndices.setDisable(true);
+                txtIndice.setVisible(false);
+                comb.setDisable(true);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+            }else{
+                instruccion.setText("Seleccione con que opcion desea comenzar el juego");
+                txtApuesta.setDisable(false);
+                txtApuesta.clear();
+                apuesta.setDisable(false);
+                btnEmpezar.setDisable(false);
+                txtCantidad.clear();
+                lookSum.setText("0");
+                txtCantidad.setDisable(true);
+                btnContinuar.setDisable(true);
+                btnDelete.setDisable(true);
+                comboIndices.setDisable(true);
+                txtIndice.setVisible(false);
+                comb.setDisable(true);
+                btnGirarDer.setDisable(true);
+                btnGirarIz.setDisable(true);
+                ruleta.getChildren().clear();
+                listaNumeros.clear();
+                listaNumeros2.clear();
+                comboIndices.getItems().clear();
+                comboIndices.setValue("0");
+            }
+        });
+        btnEmpezar.setOnAction((e) -> {
+            
+            if(txtApuesta.getText().isEmpty()){
+                instruccion.setText("Debe ingresar un valor valido en la caja de texto");
+            }else{
+                btnEmpezar.setDisable(true);
+                txtCantidad.setDisable(false);
+                btnContinuar.setDisable(false);
+            }
+        });
         btnContinuar.setOnAction((e) -> {
             btnContinuar.setDisable(true);
+            txtCantidad.setDisable(true);
             int cantidad = Integer.parseInt(txtCantidad.getText());
-
+            btnDelete.setDisable(false);
+            comboIndices.setDisable(false);
+            txtApuesta.setDisable(true);
+            txtIndice.setVisible(true);
+            comb.setDisable(false);
+            btnGirarDer.setDisable(false);
+            btnGirarIz.setDisable(false);
             for (int i = 1; i <= cantidad; i++) {
                 Numero num = new Numero();
                 num.setNumero((int) (Math.random() * 10));
@@ -102,62 +196,194 @@ public class ProyectoParcial extends Application {
                 items.add(""+v);
                 v++;
             }
-            look.setText(listaNumeros.toString());
-            look2.setText(listaNumeros2.toString());
+           
             lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
             posicionarNumeros(ruleta);
-            verificarVictoria(txtApuesta);
-            verificarDerrota();
+            if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                   
+                    contenedorOpFinales.setVisible(true);
+                    JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!");
+                   
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                }
         });
         btnGirarDer.setOnAction((e) -> {
+            
+            comboIndices.setValue("0");
             instruccion.setText("Ahora debe realizar una operacion de eliminacion");
             if (comb.getValue()=="Ruleta1"){
                 listaNumeros=moverDerecha(listaNumeros);
                 posicionarNumeros(ruleta);
+                infoGiro.setText("-->HAS RESALIZADO UN GIRO A LA DERECHA EN LA 1ERA RULETA");
                 btnGirarDer.setDisable(true);
                 btnGirarIz.setDisable(true);
                 btnDelete.setDisable(false);
-                txtDelete.setDisable(false);
+                comboIndices.setDisable(false);
+                comb.setDisable(true);
                 lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
-                verificarVictoria(txtApuesta);
-                verificarDerrota();
+                if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                   
+                    JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!!!!!!!!!!!!!!!");
+                    
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                   
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                }
                 
             }else if(comb.getValue()=="Ruleta2"){
                 listaNumeros2=moverDerecha(listaNumeros2);
                 posicionarNumeros(ruleta);
+                infoGiro.setText("-->HAS RESALIZADO UN GIRO A LA DERECHA EN LA 2DA RULETA");
                 btnGirarDer.setDisable(true);
                 btnGirarIz.setDisable(true);
                 btnDelete.setDisable(false);
-                txtDelete.setDisable(false);
+                comboIndices.setDisable(false);
+                comb.setDisable(true);
                 lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
-                verificarVictoria(txtApuesta);
-                verificarDerrota();
+                if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                  
+                    JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!!!!!!!!!!!!!!!");
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                }
             }
         });
         btnGirarIz.setOnAction((e) -> {
+            comboIndices.setValue("0");
             instruccion.setText("Ahora debe realizar una operacion de eliminacion");
             if(comb.getValue()=="Ruleta1"){
                 listaNumeros=moverIzquierda(listaNumeros);
                 posicionarNumeros(ruleta);
+                infoGiro.setText("<--HAS RESALIZADO UN GIRO A LA IZQUIERDA EN LA 1ERA RULETA");
                 btnGirarDer.setDisable(true);
                 btnGirarIz.setDisable(true);
                 btnDelete.setDisable(false);
-                txtDelete.setDisable(false);
+                comboIndices.setDisable(false);
+                comb.setDisable(true);
                 lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
-                verificarVictoria(txtApuesta);
-                verificarDerrota();
+                if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                   contenedorOpFinales.setVisible(true);
+                   
+                   JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!!!!!!!!!!!!!!!");
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                    
+                }
                 
             }
             else if(comb.getValue()=="Ruleta2"){
                 listaNumeros2=moverIzquierda(listaNumeros2);
                 posicionarNumeros(ruleta);
+                infoGiro.setText("<--HAS RESALIZADO UN GIRO A LA IZQUIERDA EN LA 2DA RULETA");
                 btnGirarDer.setDisable(true);
                 btnGirarIz.setDisable(true);
                 btnDelete.setDisable(false);
-                txtDelete.setDisable(false);
+                comboIndices.setDisable(false);
+                comb.setDisable(true);
                 lookSum.setText("" + (sumaNumeros(listaNumeros)+sumaNumeros(listaNumeros2)));
-                verificarVictoria(txtApuesta);
-                verificarDerrota();
+                if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    
+                    JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!!!!!!!!!!!!!!!");
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                }
                 
             }
         });
@@ -169,8 +395,11 @@ public class ProyectoParcial extends Application {
                 posicionarNumeros(ruleta);
                 btnDelete.setDisable(true);
                 txtDelete.setDisable(true);
+                comboIndices.setDisable(true);
                 btnGirarDer.setDisable(false);
                 btnGirarIz.setDisable(false);
+                comb.setDisable(false);
+                comb.setValue("Ruleta1");
                 if(listaNumeros.size()==0 && listaNumeros.size()==0){
                     lookSum.setText("0");
                 }else{
@@ -183,12 +412,34 @@ public class ProyectoParcial extends Application {
                     items.add(""+v);
                     v++;
                 }
-                verificarVictoria(txtApuesta);
-                verificarDerrota();
+                if(verificarVictoria(txtApuesta)){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                    
+                    JOptionPane.showMessageDialog(null, "GANASTE EL JUEGO :D!!!!!!!!!!!!!!!!!!!");
+                }
+                if (verificarDerrota()){
+                    txtCantidad.setDisable(true);
+                    btnContinuar.setDisable(true);
+                    btnDelete.setDisable(true);
+                    comboIndices.setDisable(true);
+                    txtIndice.setVisible(false);
+                    comb.setDisable(true);
+                    btnGirarDer.setDisable(true);
+                    btnGirarIz.setDisable(true);
+                    contenedorOpFinales.setVisible(true);
+                   
+                    JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
+                }
         });
-        
-
-        root1.getChildren().addAll(box1, look, look2, lookSum,kakegurui,instruccion,comb,btnGirarDer,btnGirarIz,contenedorRuleta);
+        root1.getChildren().addAll(kakegurui,box1,instruccion,contGiro,contEliminar,Espacio,Espacio1,contenedorRuleta,Espacio4,lookSum,contenedorOpFinales);
         Scene scene = new Scene(root1, 1800, 900);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -197,7 +448,7 @@ public class ProyectoParcial extends Application {
 
     //Método que recorre con un iterador la lista de niños y los posiciona de forma circular con un fórmula.
     
-    public void verificarVictoria(TextField txtapuesta){
+    public boolean verificarVictoria(TextField txtapuesta){
         //VBox ventanaVictoria = new VBox();
         //Label lb = new Label("HAS GANADO!!!!");
         
@@ -215,12 +466,17 @@ public class ProyectoParcial extends Application {
         }
         if((apuesta == sumaRuletas)){
             System.out.println("Ganaste");
+            return true;
         }
+        return false;
         
     }
-    public void verificarDerrota(){
+    public boolean verificarDerrota(){
         if(listaNumeros.size()==0 && listaNumeros2.size()==0){
-            System.out.println("Cagaste");
+            System.out.println("Perdiste");
+            return true;
+        }else{
+            return false;
         }
     }
     
