@@ -160,14 +160,23 @@ public class ProyectoParcial extends Application {
         btnEmpezar.setOnAction((e) -> {
             
             if(txtApuesta.getText().isEmpty()){
-                instruccion.setText("Debe ingresar un valor valido en la caja de texto");
+                instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
+            }else if(isNumeric(txtApuesta.getText())==false){
+                System.out.println("si");
+                instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
             }else{
+                instruccion.setText("Seleccione con que opcion desea comenzar el juego");
                 btnEmpezar.setDisable(true);
                 txtCantidad.setDisable(false);
                 btnContinuar.setDisable(false);
+                txtApuesta.setDisable(true);
             }
         });
         btnContinuar.setOnAction((e) -> {
+            if(txtCantidad.getText().isEmpty() || isNumeric(txtCantidad.getText())==false){
+                instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
+            }else{
+            instruccion.setText("Seleccione con que opcion desea comenzar el juego");
             btnContinuar.setDisable(true);
             txtCantidad.setDisable(true);
             int cantidad = Integer.parseInt(txtCantidad.getText());
@@ -225,6 +234,7 @@ public class ProyectoParcial extends Application {
                     contenedorOpFinales.setVisible(true);
                     JOptionPane.showMessageDialog(null, "PERDISTE EL JUEGO D: !!!!!!!");
                 }
+            }
         });
         btnGirarDer.setOnAction((e) -> {
             
@@ -479,6 +489,14 @@ public class ProyectoParcial extends Application {
             return false;
         }
     }
+    private static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+}
     
    
     public void posicionarNumeros(Pane panelRuleta) {
