@@ -159,7 +159,7 @@ public class ProyectoParcial extends Application {
         });
         btnEmpezar.setOnAction((e) -> {
             
-            if(txtApuesta.getText().isEmpty()){
+            if(txtApuesta.getText().isEmpty() || (Integer.parseInt(txtApuesta.getText())<=0 ) ){
                 instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
             }else if(isNumeric(txtApuesta.getText())==false){
                 System.out.println("si");
@@ -173,8 +173,11 @@ public class ProyectoParcial extends Application {
             }
         });
         btnContinuar.setOnAction((e) -> {
-            if(txtCantidad.getText().isEmpty() || isNumeric(txtCantidad.getText())==false){
+            if(txtCantidad.getText().isEmpty() || isNumeric(txtCantidad.getText())==false ){
                 instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
+            }
+            else if( (Integer.parseInt(txtCantidad.getText())<=0 )){
+            instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
             }else{
             instruccion.setText("Seleccione con que opcion desea comenzar el juego");
             btnContinuar.setDisable(true);
