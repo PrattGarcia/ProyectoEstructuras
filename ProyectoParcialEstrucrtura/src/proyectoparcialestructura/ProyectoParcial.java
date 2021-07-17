@@ -159,9 +159,9 @@ public class ProyectoParcial extends Application {
         });
         btnEmpezar.setOnAction((e) -> {
             
-            if(txtApuesta.getText().isEmpty() || (Integer.parseInt(txtApuesta.getText())<=0 ) ){
+            if(txtApuesta.getText().isEmpty() || (isNumeric(txtApuesta.getText())==false) ){
                 instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
-            }else if(isNumeric(txtApuesta.getText())==false){
+            }else if( (Integer.parseInt(txtApuesta.getText())<=0 )){
                 System.out.println("si");
                 instruccion.setText("Debe ingresar un valor valido en la caja de texto!");
             }else{
